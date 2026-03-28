@@ -115,6 +115,13 @@ Exported functions:
 - **Styling:** BEM-adjacent class names (`.app-header`, `.tab-nav`, `.data-table`). Primary color `#4f46e5`, delete/danger `#ef4444`.
 - **No test suite, no linter** configured — minimal demo project.
 
+## Known issues
+
+### API calls return HTTP 502 in Docker
+nginx proxies `/api/*` to `BACKEND_URL`. If `BACKEND_URL` defaults to `http://localhost:8080`, nginx resolves `localhost` to the container itself (not the host), causing connection refused and a 502 response.
+
+**Fix:** `BACKEND_URL` must be `http://host.docker.internal:8080` when running on macOS/Windows via Docker Desktop. The `docker-compose.yml` default is set correctly — if 502s occur, verify no `.env` file or shell variable is overriding it with `localhost`.
+
 ## Backend
 
 This SPA is designed to work with **claude-java-demo** (Spring Boot, port 8080). Start that project first before running this one. See its `CLAUDE.md` for API details and startup instructions.
